@@ -1,0 +1,91 @@
+<app-navbar />
+
+<app-cart-drawer />
+
+<div class="max-w-[1600px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
+  <!-- MOBILE SEARCH + FILTER -->
+  <div class="lg:hidden">
+    <app-search-bar />
+
+    <button
+      (click)="uiStore.toggleFilter()"
+      class="w-full h-12 mt-4 mb-5 rounded-xl bg-slate-800 border border-slate-700 font-medium"
+    >
+      Filters
+    </button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="grid lg:grid-cols-[280px_1fr] gap-6">
+    <!-- DESKTOP FILTER SIDEBAR -->
+    <aside class="hidden lg:block">
+      <app-filter-panel />
+    </aside>
+
+    <!-- PRODUCTS SECTION -->
+    <section>
+      <!-- DESKTOP SEARCH -->
+      <div class="hidden lg:block mb-6">
+        <app-search-bar />
+      </div>
+
+      <!-- PRODUCT HEADER -->
+      <div class="flex items-start justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl lg:text-4xl font-bold">Products</h2>
+
+          <p class="mt-1 text-sm text-slate-400">
+            {{ productStore.filteredProducts().length }}
+            products found
+          </p>
+        </div>
+
+        <!-- SORT -->
+        <select
+          class="h-11 w-[140px] sm:w-[180px] lg:w-[220px] rounded-xl bg-slate-800 border border-slate-700 px-3 lg:px-4 text-sm lg:text-base"
+          (change)="productStore.sortBy.set($any($event.target).value)"
+        >
+          <option value="popular">Popular</option>
+          <option value="priceAsc">Price Low → High</option>
+          <option value="priceDesc">Price High → Low</option>
+          <option value="rating">Highest Rated</option>
+        </select>
+      </div>
+
+      <!-- PRODUCT GRID -->
+      <div
+        class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6"
+      >
+        @for (product of productStore.filteredProducts(); track product.id) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+
+      <!-- EMPTY STATE -->
+      @if (productStore.filteredProducts().length === 0) {
+        <div class="py-20 text-center">
+          <h3 class="text-xl font-semibold">No products found</h3>
+
+          <p class="mt-2 text-slate-400">Try changing your filters.</p>
+        </div>
+      }
+    </section>
+  </div>
+</div>
+
+<!-- MOBILE FILTER BOTTOM SHEET -->
+@if (uiStore.filterOpen()) {
+  <div class="fixed inset-0 bg-black/60 z-[100]">
+    <div
+      class="absolute bottom-0 left-0 right-0 bg-slate-900 rounded-t-3xl p-5 max-h-[80vh] overflow-y-auto"
+    >
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold">Filters</h3>
+
+        <button (click)="uiStore.closeFilter()" class="text-2xl">×</button>
+      </div>
+
+      <app-filter-panel />
+    </div>
+  </div>
+}

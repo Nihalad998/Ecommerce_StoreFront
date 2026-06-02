@@ -1,0 +1,71 @@
+<div class="sticky top-24 bg-slate-900 rounded-2xl p-5 border border-slate-800">
+  <h3 class="text-lg font-semibold mb-6">Filters</h3>
+
+  <!-- CATEGORY -->
+  <div class="mb-6">
+    <label class="block mb-2 text-sm"> Category </label>
+
+    <select
+      [(ngModel)]="selectedCategory"
+      (ngModelChange)="onDesktopFilterChange()"
+      class="w-full h-11 rounded-xl bg-slate-800 border border-slate-700 px-3"
+    >
+      <option value="">All Categories</option>
+
+      @for (category of store.categories(); track category) {
+        <option [value]="category">
+          {{ category }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <!-- PRICE -->
+  <div class="mb-6">
+    <label class="block mb-2 text-sm"> Max Price: ₹{{ selectedPrice }} </label>
+
+    <input
+      type="range"
+      min="0"
+      max="5000"
+      [(ngModel)]="selectedPrice"
+      (ngModelChange)="onDesktopFilterChange()"
+      class="w-full"
+    />
+  </div>
+
+  <!-- RATING -->
+  <div class="mb-6">
+    <label class="block mb-2 text-sm"> Minimum Rating </label>
+
+    <select
+      [(ngModel)]="selectedRating"
+      (ngModelChange)="onDesktopFilterChange()"
+      class="w-full h-11 rounded-xl bg-slate-800 border border-slate-700 px-3"
+    >
+      <option [ngValue]="0">All Ratings</option>
+      <option [ngValue]="3">3+</option>
+      <option [ngValue]="4">4+</option>
+      <option [ngValue]="4.5">4.5+</option>
+    </select>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <div class="flex gap-3">
+    <!-- CLEAR -->
+    <button
+      (click)="resetFilters()"
+      class="flex-1 h-11 rounded-xl border border-slate-700 hover:bg-slate-800 transition"
+    >
+      Clear Filters
+    </button>
+
+    <!-- MOBILE APPLY -->
+    <button
+      (click)="applyFilters()"
+      class="lg:hidden flex-1 h-11 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition"
+    >
+      Apply
+    </button>
+  </div>
+</div>
