@@ -13,3 +13,22 @@ body {
   background: #0f172a;
   color: white;
 }
+
+.input-style {
+  @apply
+      w-full
+      h-12
+      px-4
+      rounded-xl
+      bg-slate-800
+      border
+      border-slate-700
+      outline-none;
+
+}
+
+textarea.input-style {
+  height: 120px;
+  padding-top: 12px;
+
+}

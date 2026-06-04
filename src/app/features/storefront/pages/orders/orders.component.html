@@ -1,0 +1,66 @@
+<div class="max-w-6xl mx-auto p-4 lg:p-8">
+  <button
+    (click)="goHome()"
+    class="mb-6 flex items-center gap-2 text-slate-400 hover:text-white transition"
+  >
+    ← Continue Shopping
+  </button>
+
+  <h1 class="text-4xl font-bold mb-8">My Orders</h1>
+
+  @if (!orderStore.orders().length) {
+    <div class="text-center py-20">
+      <div class="text-6xl mb-4">📦</div>
+
+      <h2 class="text-2xl font-semibold">No Orders Yet</h2>
+
+      <p class="mt-2 text-slate-400">Place your first order.</p>
+    </div>
+  }
+
+  <div class="space-y-4">
+    @for (order of orderStore.orders(); track order.id) {
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+        <div class="flex justify-between items-start">
+          <div>
+            <h3 class="text-lg font-semibold">Order #{{ order.id }}</h3>
+
+            <p class="text-slate-400 mt-1">
+              {{ order.date }}
+            </p>
+          </div>
+
+          <span
+            class="px-3 py-1 rounded-full bg-green-500/20 text-green-400 text-sm"
+          >
+            {{ order.status }}
+          </span>
+        </div>
+
+        <div class="mt-5 space-y-2">
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span>₹{{ order.subtotal }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Tax</span>
+            <span>₹{{ order.tax }}</span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Shipping</span>
+            <span>₹{{ order.shipping }}</span>
+          </div>
+
+          <hr class="border-slate-700" />
+
+          <div class="flex justify-between text-lg font-bold">
+            <span>Total</span>
+            <span>₹{{ order.total }}</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

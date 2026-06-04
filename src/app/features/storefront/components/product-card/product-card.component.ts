@@ -22,8 +22,14 @@ export class ProductCardComponent {
 
   readonly wishlistStore = inject(WishlistStore);
 
-  addToCart() {
+  addedToCart = signal(false);
+  addToCart(): void {
     this.cartStore.add(this.product);
+
+    this.addedToCart.set(true);
+    setTimeout(() => {
+      this.addedToCart.set(false);
+    }, 1500);
   }
 
   openProduct(): void {

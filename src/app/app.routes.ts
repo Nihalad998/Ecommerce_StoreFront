@@ -20,6 +20,18 @@ export const routes: Routes = [
       ).then(m => m.WishlistComponent)
   },
   {
+    path: 'checkout',
+    loadComponent: () => import(
+      './features/storefront/pages/checkout/checkout.component'
+      ).then(m => m.CheckoutComponent)
+  },
+  {
+    path: 'orders',
+    loadComponent: () => import(
+      './features/storefront/pages/orders/orders.component'
+    ).then(m => m.OrdersComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

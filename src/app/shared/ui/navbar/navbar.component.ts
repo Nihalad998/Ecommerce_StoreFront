@@ -3,6 +3,7 @@ import { CartStore } from '../../../state/cart.store';
 import { UiStore } from '../../../state/ui.store';
 import { WishlistStore } from '../../../state/wishlist.store';
 import { RouterLink } from '@angular/router';
+import { OrderStore } from '../../../state/order.store';
 
 @Component({
   selector: 'app-navbar',
@@ -17,4 +18,5 @@ export class NavbarComponent {
   uiStore = inject(UiStore);
 
   readonly wishlistStore = inject(WishlistStore);
+  readonly orderStore = inject(OrderStore);
 }

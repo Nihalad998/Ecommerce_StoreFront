@@ -51,7 +51,11 @@
           (click)="addToCart()"
           class="mt-8 h-12 px-8 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600"
         >
-          Add To Cart
+          @if (addedToCart()) {
+            ✓ Added
+          } @else {
+            Add To Cart
+          }
         </button>
       </div>
     </div>

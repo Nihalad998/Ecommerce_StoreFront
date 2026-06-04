@@ -39,10 +39,14 @@
     </div>
 
     <button
-      (click)="($event.stopPropagation); addToCart()"
+      (click)="$event.stopPropagation(); addToCart()"
       class="mt-4 w-full h-11 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600"
     >
-      Add To Cart
+      @if (addedToCart()) {
+        ✓ Added
+      } @else {
+        Add To Cart
+      }
     </button>
   </div>
 </div>

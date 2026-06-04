@@ -46,6 +46,7 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
+  addedToCart = signal(false);
   addToCart(): void {
     const product = this.product();
 
@@ -53,6 +54,11 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
     this.cartStore.add(product);
+    this.addedToCart.set(true);
+
+    setTimeout(() => {
+      this.addedToCart.set(false);
+    }, 1500);
   }
 
   // Product pages to home

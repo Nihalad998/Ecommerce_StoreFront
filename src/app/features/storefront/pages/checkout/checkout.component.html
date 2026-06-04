@@ -1,0 +1,242 @@
+<div class="max-w-4xl mx-auto p-4 lg:p-8">
+  <h1 class="text-3xl font-bold mb-8">Checkout</h1>
+
+  <!-- Progess -->
+  <div class="h-2 bg-slate-800 rounded-full mb-8">
+    <div
+      class="h-full bg-indigo-500 rounded-full"
+      [style.width.%]="progress()"
+    ></div>
+  </div>
+
+  <!-- Step Labels -->
+  <div class="grid grid-cols-4 text-center mb-10">
+    <span>Shipping</span>
+    <span>Review</span>
+    <span>Payment</span>
+    <span>Success</span>
+  </div>
+
+  <!-- Step Content -->
+  @if (currentStep() === 1) {
+    <form [formGroup]="shippingForm" class="grid md:grid-cols-2 gap-4">
+      <input
+        formControlName="fullName"
+        placeholder="Full Name"
+        class="input-style"
+      />
+      <!-- @if (
+        shippingForm.controls.email.touched &&
+        shippingForm.controls.email.invalid
+      ) {
+        <p class="text-red-400 text-sm mt-1">Enter a valid email</p>
+      } -->
+      <input formControlName="email" placeholder="Email" class="input-style" />
+      <input
+        formControlName="phone"
+        placeholder="Phone Number"
+        class="input-style"
+      />
+      <input
+        formControlName="pincode"
+        placeholder="Pincode"
+        class="input-style"
+      />
+      <textarea
+        formControlName="address"
+        placeholder="Address"
+        class="md:col-span-2 input-style"
+      ></textarea>
+      <input formControlName="city" placeholder="City" class="input-style" />
+      <input formControlName="state" placeholder="State" class="input-style" />
+    </form>
+  }
+  @if (currentStep() === 2) {
+    <div class="grid lg:grid-cols-2 gap-8">
+      <!-- Shipping Address -->
+      <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+        <h3 class="text-xl font-semibold mb-4">Shipping Address</h3>
+
+        @if (checkoutStore.shippingAddress(); as address) {
+          <div class="space-y-2">
+            <p>{{ address.fullName }}</p>
+
+            <p>{{ address.email }}</p>
+
+            <p>{{ address.phone }}</p>
+
+            <p>{{ address.address }}</p>
+
+            <p>
+              {{ address.city }}
+              ,
+              {{ address.state }}
+            </p>
+
+            <p>
+              {{ address.pincode }}
+            </p>
+          </div>
+        }
+      </div>
+
+      <!-- Order Summary -->
+      <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+        <h3 class="text-xl font-semibold mb-4">Order Summary</h3>
+
+        <div class="space-y-4">
+          @for (item of cartStore.cartItem(); track item.id) {
+            <div class="flex justify-between">
+              <span>
+                {{ item.title }}
+              </span>
+              <span> ₹{{ item.price }} </span>
+            </div>
+          }
+
+          <hr class="border-slate-700" />
+
+          <div class="flex justify-between">
+            <span>Subtotal</span>
+            <span> ₹{{ cartStore.totalPrice() }} </span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Tax (18%)</span>
+            <span> ₹{{ tax() }} </span>
+          </div>
+
+          <div class="flex justify-between">
+            <span>Shipping</span>
+            <span> ₹{{ shippingCharge() }} </span>
+          </div>
+
+          <hr class="border-slate-700" />
+
+          <div class="flex justify-between text-xl font-bold">
+            <span>Total</span>
+            <span> ₹{{ grandTotal() }} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+  @if (currentStep() === 3) {
+    <div class="max-w-lg mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-4">Payment</h2>
+
+      <p class="text-slate-400 mb-6">Total Amount</p>
+
+      <div class="text-5xl font-bold text-indigo-400 mb-8">
+        ₹{{ grandTotal() }}
+      </div>
+
+      <button
+        (click)="processPayment()"
+        [disabled]="paymentLoading()"
+        class="h-12 px-8 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600"
+      >
+        @if (paymentLoading()) {
+          Processing...
+        } @else {
+          Pay Now
+        }
+      </button>
+
+      @if (paymentError()) {
+        <p class="mt-4 text-red-400">
+          {{ paymentError() }}
+        </p>
+      }
+    </div>
+  }
+  @if (currentStep() === 4) {
+    <div class="max-w-2xl mx-auto text-center py-10">
+      <div class="text-8xl mb-6">🎉</div>
+
+      <h2 class="text-4xl lg:text-5xl font-bold mb-3">
+        Order Successfully Placed
+      </h2>
+
+      <p class="text-slate-400 mb-8">Thank you for shopping with us.</p>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8">
+        <p class="text-slate-400">Transaction ID</p>
+
+        <p class="mt-2 text-indigo-400 font-mono text-lg">
+          {{ transactionId() }}
+        </p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 mb-8">
+        <div class="flex justify-between mb-3">
+          <span>Subtotal</span>
+          <span> ₹{{ orderSubtotal() }} </span>
+        </div>
+
+        <div class="flex justify-between mb-3">
+          <span>Tax</span>
+          <span> ₹{{ orderTax() }} </span>
+        </div>
+
+        <div class="flex justify-between mb-3">
+          <span>Shipping</span>
+          <span> ₹{{ orderShipping() }} </span>
+        </div>
+
+        <hr class="border-slate-700 my-4" />
+
+        <div class="flex justify-between font-bold text-xl">
+          <span>Total Paid</span>
+          <span> ₹{{ orderTotal() }} </span>
+        </div>
+      </div>
+
+      <button
+        routerLink="/"
+        class="px-8 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition"
+      >
+        Continue Shopping
+      </button>
+    </div>
+  }
+
+  <!-- Actions -->
+  @if (currentStep() === 1) {
+    <div class="mt-8">
+      <button
+        type="button"
+        (click)="saveShippingAddress()"
+        class="px-6 py-3 rounded-xl bg-indigo-600"
+      >
+        Continue
+      </button>
+    </div>
+  }
+
+  @if (currentStep() === 2) {
+    <div class="flex justify-between mt-10">
+      <button
+        (click)="previousStep()"
+        class="px-6 py-3 rounded-xl bg-slate-800"
+      >
+        Back
+      </button>
+
+      <button (click)="nextStep()" class="px-6 py-3 rounded-xl bg-indigo-600">
+        Continue To Payment
+      </button>
+    </div>
+  }
+
+  @if (currentStep() === 3) {
+    <div class="mt-10">
+      <button
+        (click)="previousStep()"
+        class="px-6 py-3 rounded-xl bg-slate-800"
+      >
+        Back
+      </button>
+    </div>
+  }
+</div>
