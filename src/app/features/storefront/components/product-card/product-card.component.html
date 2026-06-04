@@ -9,8 +9,15 @@
       class="w-full h-52 object-contain bg-slate-950 p-4"
     />
 
-    <button class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800">
-      ❤️
+    <button
+      (click)="toggleWishlist($event)"
+      class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800"
+    >
+      @if (wishlistStore.isWishlisted(product.id)) {
+        ❤️
+      } @else {
+        🤍
+      }
     </button>
   </div>
 

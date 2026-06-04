@@ -9,10 +9,15 @@ export const routes: Routes = [
   },
   {
     path: 'products/:id',
-    loadComponent: () =>
-      import(
+    loadComponent: () => import(
         './features/storefront/pages/product-detail/product-detail.component'
       ).then(m => m.ProductDetailComponent)
+  },
+  {
+    path: 'wishlist',
+    loadComponent: () => import(
+        './features/storefront/pages/wishlist/wishlist.component'
+      ).then(m => m.WishlistComponent)
   },
   {
     path: '**',

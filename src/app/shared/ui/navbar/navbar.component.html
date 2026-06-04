@@ -6,13 +6,28 @@
   >
     <h1 class="text-2xl font-bold text-indigo-400">Shop</h1>
 
-    <button class="relative text-xl" (click)="uiStore.toggleCart()">
-      🛒
-      <span
-        class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-xs flex items-center justify-center"
-      >
-        {{ cartStore.itemCount() }}
-      </span>
-    </button>
+    <div class="flex items-center gap-5">
+      <!-- Wishliast -->
+      <button routerLink="/wishlist" class="relative text-2xl">
+        ❤️
+        @if (wishlistStore.count()) {
+          <span
+            class="absolute -top-2 -right-2 h-5 w-5 rounded-full bg-red-500 text-xs flex items-center justify-center"
+          >
+            {{ wishlistStore.count() }}
+          </span>
+        }
+      </button>
+
+      <!-- Cart -->
+      <button class="relative text-2xl" (click)="uiStore.toggleCart()">
+        🛒
+        <span
+          class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-xs flex items-center justify-center"
+        >
+          {{ cartStore.itemCount() }}
+        </span>
+      </button>
+    </div>
   </div>
 </header>
