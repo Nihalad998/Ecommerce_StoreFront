@@ -1,0 +1,113 @@
+<div class="p-4 lg:p-8">
+  <!-- Header -->
+  <div
+    class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6"
+  >
+    <div>
+      <h1 class="text-3xl font-bold">Products</h1>
+      <p class="text-slate-400 mt-1">Manage inventory & products</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-slate-900 rounded-2xl border border-slate-800 p-4 mb-6">
+    <div class="flex flex-wrap gap-3 items-center">
+      <!-- Search -->
+      <input
+        type="text"
+        placeholder="Search products..."
+        (input)="search.set($any($event.target).value); page.set(1)"
+        class="flex-1 min-w-[220px] h-11 px-4 rounded-xl bg-slate-800 border border-slate-700 outline-none focus:border-indigo-500"
+      />
+
+      <!-- Sort -->
+      <select
+        (change)="sortBy.set($any($event.target).value); page.set(1)"
+        class="h-11 px-4 rounded-xl bg-slate-800 border border-slate-700"
+      >
+        <option value="default">Default</option>
+        <option value="price">Price High → Low</option>
+        <option value="stock">Low Stock First</option>
+      </select>
+
+      <!-- Low Stock -->
+      <button
+        (click)="lowStockOnly.set(!lowStockOnly())"
+        class="h-11 px-4 rounded-xl border transition-all duration-300"
+        [class.bg-indigo-600]="lowStockOnly()"
+        [class.border-indigo-600]="lowStockOnly()"
+        [class.border-slate-700]="!lowStockOnly()"
+      >
+        Low Stock
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto bg-slate-900 rounded-2xl border border-slate-800">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-slate-800">
+          <th class="p-4 text-left">Product</th>
+          <th class="p-4 text-left">Category</th>
+          <th class="p-4 text-left">Stock</th>
+          <th class="p-4 text-left">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of paginatedProducts(); track product.id) {
+          <tr class="border-b border-slate-800 hover:bg-slate-800/50">
+            <td class="p-4">{{ product.name }}</td>
+            <td class="p-4">{{ product.category }}</td>
+            <td class="p-4">
+              @if (product.stock < 10) {
+                <span
+                  class="px-2 py-1 rounded-full text-sm bg-red-500/20 text-red-400"
+                >
+                  {{ product.stock }}
+                </span>
+              } @else {
+                {{ product.stock }}
+              }
+            </td>
+            <td class="p-4">{{ product.price }}</td>
+          </tr>
+        }
+        @if (paginatedProducts().length === 0) {
+          <tr>
+            <td colspan="4" class="text-center py-10 text-slate-500">
+              No Products found
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="flex flex-col items-center justify-between gap-4 mt-6">
+    <p class="text-slate-400">
+      Showing
+      {{ (page() - 1) * pageSize + 1 }}
+      -
+      {{ endIndex() }}
+      products
+    </p>
+    <div class="flex gap-2">
+      <button
+        (click)="previousPage()"
+        [disabled]="page() === 1"
+        class="px-4 py-2 rounded-xl bg-slate-800 disabled:opacity-40"
+      >
+        Previous
+      </button>
+      <button
+        (click)="nextPage()"
+        [disabled]="page() === totalPage()"
+        class="px-4 py-2 rounded-xl bg-indigo-600 disabled:opacity-40"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

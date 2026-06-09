@@ -30,8 +30,11 @@ export class OrderStore {
   }
 
   private loadOrders(): Order[] {
-    const data = localStorage.getItem('orders');
+    if(typeof localStorage === 'undefined'){
+      return [];
+    }
 
+    const data = localStorage.getItem('orders');
     return data ? JSON.parse(data) : [];
   }
 

@@ -40,15 +40,20 @@ export class WishlistStore {
   }
 
   private persist(): void {
+    if(typeof localStorage === 'undefined'){
+      return;
+    } 
 
     localStorage.setItem('wishlist', JSON.stringify(this.items()));
 
   }
 
   private loadWishlist(): Product[] {
+    if(typeof localStorage === 'undefined') {
+      return [];
+    }
 
     const data = localStorage.getItem('wishlist');
-
     return data? JSON.parse(data): [];
 
   }

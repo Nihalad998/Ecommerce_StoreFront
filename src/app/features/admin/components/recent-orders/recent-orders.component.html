@@ -1,0 +1,59 @@
+<div class="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+  <h2 class="text-xl font-semibold mb-6">Recent Orders</h2>
+
+  <!-- Search Input -->
+  <input
+    #searchInput
+    type="text"
+    placeholder="Search order by Order ID/Name..."
+    class="w-full mb-6 h-11 px-4 rounded-xl text-black bg-white border border-slate-800 outline-none focus:border-indigo-500"
+  />
+
+  <div class="overflow-x-auto">
+    <table class="w-full">
+      <thead>
+        <tr class="border-b border-slate-800">
+          <th class="text-left pb-4">Order ID</th>
+
+          <th class="text-left pb-4">Customer</th>
+
+          <th class="text-left pb-4">Amount</th>
+
+          <th class="text-left pb-4">Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (filteredOrders().length) {
+          @for (order of filteredOrders(); track order.id) {
+            <tr class="border-b border-slate-800">
+              <td class="py-4">
+                {{ order.id }}
+              </td>
+
+              <td>
+                {{ order.customer }}
+              </td>
+
+              <td>₹{{ order.amount }}</td>
+
+              <td>
+                <span
+                  class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400"
+                >
+                  {{ order.status }}
+                </span>
+              </td>
+            </tr>
+          }
+        } @else {
+          <tr>
+            <td colspan="4" class="text-center py-10 text-slate-500">
+              No orders found
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

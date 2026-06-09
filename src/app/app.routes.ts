@@ -32,6 +32,18 @@ export const routes: Routes = [
     ).then(m => m.OrdersComponent)
   },
   {
+    path: 'admin',
+    loadComponent: () => import(
+      './features/admin/pages/dashboard/dashboard.component'
+    ).then(m => m.DashboardComponent)
+  },
+  {
+    path: 'admin/products',
+    loadComponent: () => import(
+      './features/admin/pages/products/products.component'
+    ).then(m => m.ProductsComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }
