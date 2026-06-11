@@ -22,12 +22,9 @@
         class="h-11 px-4 rounded-xl bg-slate-800 border border-slate-700"
       >
         <option value="all">All Status</option>
-
-        <option value="Delivered">Delivered</option>
-
         <option value="Pending">Pending</option>
-
-        <option value="Cancelled">Cancelled</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
       </select>
     </div>
   </div>
@@ -38,7 +35,9 @@
       <thead>
         <tr class="border-b border-slate-800">
           <th class="p-4 text-left">Order ID</th>
+          <th class="p-4 text-left">Customer</th>
           <th class="p-4 text-left">Date</th>
+          <th class="p-4 text-left">Items</th>
           <th class="p-4 text-left">Total</th>
           <th class="p-4 text-left">Status</th>
         </tr>
@@ -54,22 +53,38 @@
               <td class="p-4">
                 {{ order.id }}
               </td>
+
               <td class="p-4">
-                {{ order.date }}
+                {{ order.customer || "Guest Customer" }}
               </td>
-              <td class="p-4">₹{{ order.total.toFixed(2) }}</td>
+
               <td class="p-4">
-                <span
-                  class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400"
+                {{ order.date | date: "mediumDate" }}
+              </td>
+
+              <td class="p-4">{{ order.items.length }} items</td>
+
+              <td class="p-4">₹{{ order.total.toFixed(2) }}</td>
+
+              <td class="p-4">
+                <select
+                  [value]="order.status"
+                  (click)="$event.stopPropagation()"
+                  (change)="
+                    updateOrderStatus(order.id, $any($event.target).value)
+                  "
+                  class="h-9 px-2 rounded-lg bg-slate-800 border border-slate-700 text-sm"
                 >
-                  {{ order.status }}
-                </span>
+                  <option value="Pending">Pending</option>
+                  <option value="Shipped">Shipped</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
               </td>
             </tr>
           }
         } @else {
           <tr>
-            <td colspan="4" class="text-center py-10 text-slate-500">
+            <td colspan="6" class="text-center py-10 text-slate-500">
               No orders found
             </td>
           </tr>

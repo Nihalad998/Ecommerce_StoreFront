@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { AdminDataService } from '../../../../core/services/admin-data.service';
 import { Chart, registerables } from 'chart.js';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
@@ -14,7 +14,7 @@ Chart.register(...registerables);
   styleUrl: './analytics.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AnalyticsComponent implements AfterViewInit {
+export class AnalyticsComponent implements AfterViewInit, OnInit {
 
   readonly adminData = inject(AdminDataService);
   readonly analytics = inject(AnalyticsService);
@@ -37,34 +37,16 @@ export class AnalyticsComponent implements AfterViewInit {
     this.createOrdersChart();
     this.createCategoryChart();
   }
+
   ngOnInit(): void {
-    this.analytics.loadCategoryDistribution().subscribe(response => 
-      {
-        const counts = response.products.reduce(
-            (
-              acc: Record<string, number>,
-              product: any
-            ) => {
+    this.analytics.loadCategoryDistribution().subscribe(data => {
+      this.analytics.categoryLabels.set(data.labels);
+      this.analytics.categoryValues.set(data.values);
 
-              acc[product.category] = (acc[product.category] || 0) + 1;
-
-              return acc;
-            },
-            {}
-          );
-        this.analytics.categoryLabels.set(
-          Object.keys(counts)
-        );
-        this.analytics.categoryValues.set(
-          Object.values(counts)
-        );
-        
-        queueMicrotask(() => {
-          this.updateCategoryChart();
-        })
-
+      queueMicrotask(() => {
+        this.updateCategoryChart();
       });
-
+    });
   }
 
 
@@ -74,9 +56,7 @@ export class AnalyticsComponent implements AfterViewInit {
       {
         type: 'line',
         data: {
-          labels: [
-            'Jan','Feb','Mar','Apr','May','Jun'
-          ],
+          labels: this.analytics.monthLabels(),
           datasets: [
             {
               label: 'Revenue',
@@ -99,9 +79,7 @@ export class AnalyticsComponent implements AfterViewInit {
       {
         type: 'bar',
         data: {
-          labels: [
-            'Jan','Feb','Mar','Apr','May','Jun'
-          ],
+          labels: this.analytics.monthLabels(),
           datasets: [
             {
               label: 'Orders',

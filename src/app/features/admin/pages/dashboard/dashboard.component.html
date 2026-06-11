@@ -22,18 +22,20 @@
       <!-- KPI Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
         <!-- Revenue -->
-        <div
+        <a
+          routerLink="/admin/orders"
           class="bg-slate-900 rounded-2xl p-5 border border-slate-800 hover:border-indigo-500 hover:-translate-y-1 transition-all duration-300"
         >
           <p class="text-slate-400">Revenue</p>
 
           <h2 class="text-3xl font-bold mt-2 text-green-400">
-            ₹{{ adminData.revenue() }}
+            ₹{{ adminData.revenue().toFixed(2) }}
           </h2>
-        </div>
+        </a>
 
         <!-- Orders -->
-        <div
+        <a
+          routerLink="/admin/orders"
           class="bg-slate-900 rounded-2xl p-5 border border-slate-800 hover:border-indigo-500 hover:-translate-y-1 transition-all duration-300"
         >
           <p class="text-slate-400">Orders</p>
@@ -41,10 +43,11 @@
           <h2 class="text-3xl font-bold mt-2 text-indigo-400">
             {{ adminData.orders() }}
           </h2>
-        </div>
+        </a>
 
         <!-- Customers -->
-        <div
+        <a
+          routerLink="/admin/orders"
           class="bg-slate-900 rounded-2xl p-5 border border-slate-800 hover:border-indigo-500 hover:-translate-y-1 transition-all duration-300"
         >
           <p class="text-slate-400">Customers</p>
@@ -52,10 +55,11 @@
           <h2 class="text-3xl font-bold mt-2 text-yellow-400">
             {{ adminData.customers() }}
           </h2>
-        </div>
+        </a>
 
         <!-- Products -->
-        <div
+        <a
+          routerLink="/admin/products"
           class="bg-slate-900 rounded-2xl p-5 border border-slate-800 hover:border-indigo-500 hover:-translate-y-1 transition-all duration-300"
         >
           <p class="text-slate-400">Products</p>
@@ -63,7 +67,7 @@
           <h2 class="text-3xl font-bold mt-2 text-purple-400">
             {{ adminData.totalProducts() }}
           </h2>
-        </div>
+        </a>
 
         <!-- Average Order Value -->
         <div
@@ -92,14 +96,11 @@
         }
       </div>
 
-      <!-- Bottom Section -->
-      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <!-- Recent Orders -->
-        <app-recent-orders />
+      <!-- Recent Order Table -->
+      <app-recent-orders />
 
-        <!-- Inventory Alerts -->
-        <app-inventory-table />
-      </div>
+      <!-- Inventort Alerts Table -->
+      <app-inventory-table />
     </div>
   </main>
 </div>

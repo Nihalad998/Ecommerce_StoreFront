@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { AdminDataService } from '../../../../core/services/admin-data.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { AdminDataService } from '../../../../core/services/admin-data.service';
   styleUrl: './products.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductsComponent {
+export class ProductsComponent implements OnInit {
 
   readonly adminData = inject(AdminDataService);
   
@@ -19,6 +19,35 @@ export class ProductsComponent {
   readonly lowStockOnly = signal(false);
   readonly page = signal(1);
   readonly pageSize = 20;
+
+  readonly lowStockCount = computed(() => 
+    this.adminData.productList().filter(
+      product => product.stock > 0 && product.stock < 10).length
+  );
+  readonly outOfStockCount = computed(() => 
+    this.adminData.productList().filter(
+      product => product.stock === 0
+    ).length
+  );
+  readonly inventoryCalue =computed(() => 
+    this.adminData.productList().reduce(
+      (total, product) => total + product.price * product.stock, 0 
+    )
+  );
+
+  ngOnInit(): void {
+    this.adminData.loadProducts();
+  }
+
+  restockProduct(productId: number): void {
+    this.adminData.productList.update(products => 
+      products.map(product => 
+        product.id === productId 
+        ? {...product, stock: product.stock + 25}      
+        : product
+      )
+    )
+  }
 
   readonly filterProducts = computed(() => {
     let products = [...this.adminData.productList()];
@@ -30,7 +59,7 @@ export class ProductsComponent {
     }
 
     if(term) {
-      products = products.filter(product => product.name.toLowerCase().includes(term));
+      products = products.filter(product => product.title.toLowerCase().includes(term));
     }
 
     if(this.lowStockOnly()) {

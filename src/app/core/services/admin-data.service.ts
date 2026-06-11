@@ -1,99 +1,82 @@
-import { isPlatformBrowser } from "@angular/common";
-import { computed, inject, Injectable, PLATFORM_ID, signal } from "@angular/core";
-import { BehaviorSubject } from 'rxjs';
+import { computed, inject, Injectable, signal } from "@angular/core";
+import { OrderStore } from "../../state/order.store";
+import { ProductService } from "./product.service";
+import { Product } from "../models/product.model";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AdminDataService {
-  
-  readonly revenue = signal(84250);
-  readonly orders = signal(1240);
-  readonly customers = signal(312);
-  readonly totalProducts = signal(1000);
 
-  
-  private platformId = inject(PLATFORM_ID);
-
-  readonly averageOrderValue = computed(() => Math.round(this.revenue() / this.orders()));
-
-  readonly productList = signal(
-    Array.from(
-      { length: 1000 },
-      (_, index) => ({
-        id: index + 1,
-        name: `Product ${index + 1}`,
-        category: ['Electronics', 'Fashion', 'Home', 'Sports'][index % 4],
-        stock: Math.floor(Math.random() * 100),
-        price: Math.floor(Math.random() * 10000)
-      })
-    )
+  private orderStore = inject(OrderStore);
+  private productService = inject(ProductService);
+ 
+  readonly revenue = computed(() => 
+    this.orderStore.orders().reduce((total, order) => total + order.total, 0)
   );
 
-  constructor() {
-    if(isPlatformBrowser(this.platformId)) {
-      setInterval(() => {
-        this.revenue.update(value => value + Math.floor(Math.random() * 500)
-        );
+  readonly orders = computed(() => this.orderStore.orders().length);
 
-        this.orders.update(value => value + Math.floor(Math.random() * 3));
-      }, 5000);
+  readonly customers = computed(() => 
+    new Set(
+      this.orderStore.orders().map(order => order.customer).filter(Boolean)
+      ).size
+  );
+
+  readonly totalProducts = computed(() => this.productList().length);
+
+  readonly averageOrderValue = computed(() => {
+    const orderCount = this.orders();
+
+    return orderCount ? Math.round(this.revenue() / orderCount) : 0;
+  });
+
+  readonly productList = signal<Product[]>([]);
+
+  readonly categories = computed(() => 
+    [...new Set(this.productList().map(product => product.category))]
+  );
+
+  readonly productsLoaded = signal(false);
+
+  readonly productError = signal('');
+
+  loadProducts(): void {
+    if(this.productList().length) {
+      this.productsLoaded.set(true);
+      return;
     }
+
+    this.productsLoaded.set(false);
+    this.productError.set('');
+
+    this.productService.getProduct().subscribe({ 
+      next: response => {
+        this.productList.set(response.products);
+        this.productsLoaded.set(true);
+    
+      }
+    });
+
   }
 
-  readonly recentOrders = signal([
-    {
-      id: 'TXN-1001',
-      customer: 'John Doe',
-      amount: 1499,
-      status: 'Delivered',
-      date: '2026-06-08'
-    },
-    {
-      id: 'TXN-1002',
-      customer: 'Sarah Smith',
-      amount: 899,
-      status: 'Pending',
-      date: '2026-06-08'
-    },
-    {
-      id: 'TXN-1003',
-      customer: 'Mike Johnson',
-      amount: 2499,
-      status: 'Shipped',
-      date: '2026-06-07'
-    },
-    {
-      id: 'TXN-1004',
-      customer: 'Alex Brown',
-      amount: 599,
-      status: 'Delivered',
-      date: '2026-06-07'
-    }
-  ]);
+  readonly recentOrders = computed(() => 
+    this.orderStore.orders().slice(0, 10)
+  );
 
-  readonly inventoryAlerts = signal([
-    {
-      id: 1,
-      productName: 'Wireless Mouse',
-      stock: 3
-    },
-    {
-      id: 2,
-      productName: 'Gaming Keyboard',
-      stock: 5
-    },
-    {
-      id: 3,
-      productName: 'USB-C Cable',
-      stock: 1
-    },
-    {
-      id: 4,
-      productName: 'Laptop Stand',
-      stock: 4
-    }
-  ]);
+  readonly ordersLoaded = this.orderStore.loaded.asReadonly();
+
+  readonly inventoryAlerts = computed(() =>
+   this.productList()
+    .filter(product => product.stock < 10)
+    .sort((a, b) => a.stock - b.stock)
+    .slice(0, 10)
+    .map(product => ({
+      id: product.id,
+      productName: product.title,
+      stock: product.stock
+    }))
+  );
 
 }

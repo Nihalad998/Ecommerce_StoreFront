@@ -17,7 +17,7 @@ export function createPaymentGateway() {
           const success = true;
 
           if (success) {
-            resolve(`TXN-${Date.now()}-${transactionCount}`);
+            resolve(`TXN-${Date.now()}`);
           } else {
             reject('Payment Failed');
 

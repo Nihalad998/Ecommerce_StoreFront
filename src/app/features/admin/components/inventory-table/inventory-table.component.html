@@ -2,23 +2,30 @@
   <h2 class="text-xl font-semibold mb-6">Inventory Alerts</h2>
 
   <div class="space-y-4">
-    @for (item of adminData.inventoryAlerts(); track item.id) {
-      <div
-        class="flex justify-between items-center p-3 rounded-xl bg-slate-800"
-      >
-        <div>
-          <p class="font-medium">
-            {{ item.productName }}
-          </p>
-
-          <p class="text-sm text-slate-400">Low Stock</p>
-        </div>
-
-        <span class="text-red-400 font-bold">
-          {{ item.stock }}
-          left
-        </span>
+    @if (!adminData.productsLoaded()) {
+      <div class="text-center py-8 text-slate-500">Loading inventory...</div>
+    } @else if (adminData.productError()) {
+      <div class="text-center py-8 text-slate-500">
+        {{ adminData.productError() }}
       </div>
+    } @else if (adminData.inventoryAlerts().length) {
+      @for (item of adminData.inventoryAlerts(); track item.id) {
+        <div
+          class="flex justify-between items-center p-3 rounded-xl bg-slate-800"
+        >
+          <div>
+            <p class="font-medium">
+              {{ item.productName }}
+            </p>
+
+            <p class="text-sm text-slate-400">Low Stock</p>
+          </div>
+
+          <span class="text-red-400 font-bold"> {{ item.stock }} left </span>
+        </div>
+      }
+    } @else {
+      <div class="text-center py-8 text-slate-500">No inventory alerts</div>
     }
   </div>
 </div>

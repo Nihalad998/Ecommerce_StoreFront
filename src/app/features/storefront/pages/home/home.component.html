@@ -4,7 +4,7 @@
 
 <div class="max-w-[1600px] mx-auto px-3 sm:px-4 py-4 sm:py-6">
   <!-- MOBILE SEARCH + FILTER -->
-  <div class="lg:hidden">
+  <div class="lg:hidden pt-20">
     <app-search-bar />
 
     <button
@@ -25,7 +25,7 @@
     <!-- PRODUCTS SECTION -->
     <section>
       <!-- DESKTOP SEARCH -->
-      <div class="hidden lg:block mb-6">
+      <div class="hidden lg:block mb-6 pt-20">
         <app-search-bar />
       </div>
 
@@ -56,10 +56,21 @@
       <div
         class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6"
       >
-        @for (product of productStore.filteredProducts(); track product.id) {
+        @for (product of displayedProducts(); track product.id) {
           <app-product-card [product]="product" />
         }
       </div>
+
+      <!-- Loading Indicator -->
+      @if (
+        displayedProducts().length < productStore.filteredProducts().length
+      ) {
+        <div class="flex justify-center py-10">
+          <div
+            class="h-12 w-10 rounded-full border-4 border-slate-700 border-t-indigo-500 animate-spin"
+          ></div>
+        </div>
+      }
 
       <!-- EMPTY STATE -->
       @if (productStore.filteredProducts().length === 0) {

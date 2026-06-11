@@ -1,4 +1,4 @@
-<div class="bg-slate-900 rounded-2xl border border-slate-800 p-6">
+<div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 mb-8">
   <h2 class="text-xl font-semibold mb-6">Recent Orders</h2>
 
   <!-- Search Input -->
@@ -24,7 +24,7 @@
       </thead>
 
       <tbody>
-        @if (filteredOrders().length) {
+        @if (filteredOrders().length > 0) {
           @for (order of filteredOrders(); track order.id) {
             <tr class="border-b border-slate-800">
               <td class="py-4">
@@ -35,7 +35,7 @@
                 {{ order.customer }}
               </td>
 
-              <td>₹{{ order.amount }}</td>
+              <td>₹{{ order.total.toFixed(2) }}</td>
 
               <td>
                 <span
@@ -46,7 +46,7 @@
               </td>
             </tr>
           }
-        } @else {
+        } @else if (adminData.ordersLoaded()) {
           <tr>
             <td colspan="4" class="text-center py-10 text-slate-500">
               No orders found

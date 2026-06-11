@@ -31,9 +31,8 @@ export class RecentOrdersComponent implements AfterViewInit {
       return this.adminData.recentOrders();
     }
 
-    return this.adminData.recentOrders().filter(
-      order => 
-        order.customer.toLowerCase().includes(search) 
+    return this.adminData.recentOrders().filter(order => 
+        order.customer?.toLowerCase().includes(search) 
         || 
         order.id.toLowerCase().includes(search)
         || 

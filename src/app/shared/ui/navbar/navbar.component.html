@@ -1,10 +1,12 @@
 <header
-  class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-700"
+  class="fixed top-0 left-0 right-0 z-50 transition-transform duration-300 bg-slate-900/80 backdrop-blur-md border-b border-slate-700"
+  [class.translate-y-0]="showNavbar()"
+  [class.-translate-y-full]="!showNavbar()"
 >
   <div
     class="max-w-[1600px] mx-auto px-4 h-16 flex items-center justify-between"
   >
-    <h1 class="text-2xl font-bold text-indigo-400">Shop</h1>
+    <h1 class="text-2xl font-bold text-indigo-400">SHOP FRONT</h1>
 
     <div class="flex items-center gap-5">
       <!-- Admin -->

@@ -1,10 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { OrderStore } from '../../../../state/order.store';
+import { OrderStatus, OrderStore } from '../../../../state/order.store';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './orders.component.html',
   styleUrl: './orders.component.scss'
 })
@@ -44,6 +45,10 @@ export class OrdersComponent {
 
   closeDrawer(): void {
     this.selectedOrder.set(null);
+  }
+
+  updateOrderStatus(orderId: string, status: string): void {
+    this.orderStore.updateStatus(orderId, status as OrderStatus);
   }
 
 
