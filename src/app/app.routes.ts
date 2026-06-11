@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AdminLayoutComponent } from './features/admin/layouts/admin-layout/admin-layout.component';
 
 export const routes: Routes = [
   {
@@ -33,15 +34,33 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    loadComponent: () => import(
-      './features/admin/pages/dashboard/dashboard.component'
-    ).then(m => m.DashboardComponent)
-  },
-  {
-    path: 'admin/products',
-    loadComponent: () => import(
-      './features/admin/pages/products/products.component'
-    ).then(m => m.ProductsComponent)
+    component: AdminLayoutComponent,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import(
+          './features/admin/pages/dashboard/dashboard.component'
+        ).then(m => m.DashboardComponent)
+      },
+      {
+        path: 'products',
+        loadComponent: () => import(
+          './features/admin/pages/products/products.component'
+        ).then(m => m.ProductsComponent)
+      },
+      {
+        path: 'orders',
+        loadComponent: () => import(
+          './features/admin/pages/orders/orders.component'
+        ).then(m => m.OrdersComponent)
+      },
+      {
+        path:'analytics',
+        loadComponent: () => import(
+          './features/admin/pages/analytics/analytics.component'
+        ).then(m => m.AnalyticsComponent)
+      },
+    ]
   },
   {
     path: '**',

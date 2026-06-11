@@ -14,6 +14,7 @@ export class ProductsComponent {
   readonly adminData = inject(AdminDataService);
   
   readonly search = signal('');
+  readonly category = signal('all');
   readonly sortBy = signal('name');
   readonly lowStockOnly = signal(false);
   readonly page = signal(1);
@@ -23,6 +24,10 @@ export class ProductsComponent {
     let products = [...this.adminData.productList()];
 
     const term = this.search().toLowerCase();
+
+    if(this.category() !== 'all') {
+      products = products.filter(product => product.category === this.category());
+    }
 
     if(term) {
       products = products.filter(product => product.name.toLowerCase().includes(term));

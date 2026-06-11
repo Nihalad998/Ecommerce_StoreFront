@@ -1,16 +1,26 @@
 <aside
-  class="hidden h-full md:flex w-64 flex-col bg-slate-900 border-r border-slate-800"
+  class="fixed md:static top-0 left-0 h-screen w-64 bg-slate-900 border-r border-slate-800 z-50 transition-transform duration-300 md:translate-x-0"
+  [class.translate-x-0]="menuOpen()"
+  [class.-translate-x-full]="!menuOpen()"
 >
+  <!-- Logo -->
   <div class="h-16 flex items-center px-6 border-b border-slate-800">
     <h2 class="text-xl font-bold text-indigo-400">Admin</h2>
+
+    <!-- Close Button Mobile -->
+    <button class="ml-auto md:hidden text-xl" (click)="closeMenu.emit()">
+      ✕
+    </button>
   </div>
 
+  <!-- Navigation -->
   <nav class="p-4 space-y-2">
     <a
       routerLink="/admin"
       routerLinkActive="bg-slate-800"
       [routerLinkActiveOptions]="{ exact: true }"
-      class="flex items-center gap-3 px-4 py-3 rounded-xl"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
+      (click)="closeMenu.emit()"
     >
       📊 Dashboard
     </a>
@@ -18,13 +28,46 @@
     <a
       routerLink="/admin/products"
       routerLinkActive="bg-slate-800"
-      class="flex items-center gap-3 px-4 py-3 rounded-xl"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
+      (click)="closeMenu.emit()"
     >
       📦 Products
     </a>
 
-    <a class="flex items-center gap-3 px-4 py-3 rounded-xl"> 🧾 Orders </a>
+    <a
+      routerLink="/admin/orders"
+      routerLinkActive="bg-slate-800"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
+      (click)="closeMenu.emit()"
+    >
+      🧾 Orders
+    </a>
 
-    <a class="flex items-center gap-3 px-4 py-3 rounded-xl"> 📈 Analytics </a>
+    <a
+      routerLink="/admin/analytics"
+      routerLinkActive="bg-slate-800"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition"
+      (click)="closeMenu.emit()"
+    >
+      📈 Analytics
+    </a>
   </nav>
+
+  <!-- Bottom Section -->
+  <div class="absolute bottom-4 left-4 right-4">
+    <a
+      routerLink="/"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500/20 transition"
+    >
+      ← Storefront
+    </a>
+  </div>
 </aside>
+
+<!-- Mobile Backdrop -->
+@if (menuOpen()) {
+  <div
+    class="fixed inset-0 bg-black/50 z-40 md:hidden"
+    (click)="closeMenu.emit()"
+  ></div>
+}

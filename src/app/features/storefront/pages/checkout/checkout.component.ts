@@ -5,6 +5,7 @@ import { CartStore } from '../../../../state/cart.store';
 import { createPaymentGateway } from '../../../../core/utils/payment-gateway';
 import { RouterLink } from '@angular/router';
 import { OrderStore } from '../../../../state/order.store';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-checkout',
@@ -20,6 +21,7 @@ export class CheckoutComponent {
   readonly checkoutStore = inject(CheckoutStore);
   readonly cartStore = inject(CartStore);
   readonly orderStore = inject(OrderStore);
+  private analytics = inject(AnalyticsService);
 
   readonly currentStep = signal(1);
   readonly progress = computed(() => (this.currentStep() / 4) * 100);
@@ -135,15 +137,18 @@ export class CheckoutComponent {
       );
 
       this.orderStore.addOrder({
-        id: txnId,
-        date: new Date().toLocaleDateString(),
-        subtotal: this.orderSubtotal(),
-        tax: this.orderTax(),
-        shipping: this.orderShipping(),
-        total: this.orderTotal(),
-        status: 'Delivered'
+      id: txnId,
+      date: new Date().toLocaleDateString(),
+      items: [...this.cartStore.cartItem()],
+      subtotal: Number(this.orderSubtotal().toFixed(2)),
+      tax: Number(this.orderTax().toFixed(2)),
+      shipping: Number(this.orderShipping().toFixed(2)),
+      total: Number(this.orderTotal().toFixed(2)),
+      status: 'Delivered'
+    });
 
-      });
+      this.analytics.addRevenue(this.orderTotal());
+      this.analytics.addOrder();
 
       this.cartStore.clear();
       this.currentStep.set(4);

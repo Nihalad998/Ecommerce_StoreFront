@@ -1,8 +1,10 @@
 import { Injectable, signal } from "@angular/core";
+import { CartItem } from "./cart.store";
 
 export interface Order {
   id: string;
   date: string;
+  items: CartItem[];
   subtotal: number;
   tax: number;
   shipping: number;

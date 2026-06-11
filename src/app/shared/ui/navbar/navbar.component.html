@@ -7,11 +7,17 @@
     <h1 class="text-2xl font-bold text-indigo-400">Shop</h1>
 
     <div class="flex items-center gap-5">
-      <!-- Wishlist -->
+      <!-- Admin -->
+      <button
+        routerLink="/admin"
+        class="h-10 px-4 rounded-xl bg-slate-900/50 hover:bg-cyan-500 hover:text-black transition"
+      >
+        Admin
+      </button>
 
+      <!-- Wishlist -->
       <button routerLink="/wishlist" class="relative text-2xl">
         ❤️
-
         @if (wishlistStore.count()) {
           <span
             class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-xs flex items-center justify-center"
@@ -22,10 +28,8 @@
       </button>
 
       <!-- Orders -->
-
       <button routerLink="/orders" class="relative text-2xl">
         📦
-
         @if (orderStore.orders().length) {
           <span
             class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-indigo-500 text-xs flex items-center justify-center"
@@ -36,10 +40,8 @@
       </button>
 
       <!-- Cart -->
-
       <button class="relative text-2xl" (click)="uiStore.toggleCart()">
         🛒
-
         <span
           class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-xs flex items-center justify-center"
         >

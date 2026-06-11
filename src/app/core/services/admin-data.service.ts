@@ -13,6 +13,7 @@ export class AdminDataService {
   readonly customers = signal(312);
   readonly totalProducts = signal(1000);
 
+  
   private platformId = inject(PLATFORM_ID);
 
   readonly averageOrderValue = computed(() => Math.round(this.revenue() / this.orders()));
