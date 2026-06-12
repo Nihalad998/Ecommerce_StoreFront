@@ -28,12 +28,7 @@ export class HomeComponent implements OnInit {
   );
 
   ngOnInit(): void {
-
-    this.productService.getProduct().subscribe({
-      next: (res) => {
-        this.productStore.setProducts(res.products);
-      }
-    });
+    this.loadProducts();
   }
 
   constructor() {
@@ -57,5 +52,21 @@ export class HomeComponent implements OnInit {
       }
     }
   }
-  
+
+  // Home Loading/Error
+  loadProducts(): void {
+    this.productStore.loading.set(true);
+    this.productStore.error.set('');
+
+    this.productService.getProduct().subscribe({
+      next: res => {
+        this.productStore.setProducts(res.products);
+        this.productStore.loading.set(false);
+      },
+      error: () => {
+        this.productStore.error.set('Unable to load products');
+        this.productStore.loading.set(false);
+      }
+    });
+  }  
 }

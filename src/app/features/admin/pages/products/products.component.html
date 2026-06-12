@@ -169,7 +169,11 @@
     </p>
 
     <div class="flex gap-2">
-      <button (click)="previousPage()" [disabled]="page() === 1">
+      <button
+        (click)="previousPage()"
+        [disabled]="page() === 1"
+        class="px-3 py-1 rounded-2xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+      >
         Previous
       </button>
 
@@ -178,7 +182,11 @@
         {{ totalPage() }}
       </span>
 
-      <button (click)="nextPage()" [disabled]="page() === totalPage()">
+      <button
+        (click)="nextPage()"
+        [disabled]="page() === totalPage()"
+        class="px-3 py-1 rounded-2xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+      >
         Next
       </button>
     </div>

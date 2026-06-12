@@ -26,7 +26,7 @@
             <h3 class="text-lg font-semibold">Order #{{ order.id }}</h3>
 
             <p class="text-slate-400 mt-1">
-              {{ order.date }}
+              {{ order.date | date: "mediumData" }}
             </p>
           </div>
 

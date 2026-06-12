@@ -8,7 +8,9 @@ export class ProductStore {
  
   readonly products = signal<Product[]>([]); 
   readonly search = signal('');
-  readonly loading =signal(false);
+
+  readonly loading = signal(false);
+  readonly error = signal('');
 
   readonly category = signal('');
   readonly maxPrice = signal(5000);
@@ -69,5 +71,7 @@ export class ProductStore {
   setSearch(value: string) {
     this.search.set(value);
   }
+
+  
   
 }

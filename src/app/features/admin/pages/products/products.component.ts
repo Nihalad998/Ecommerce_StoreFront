@@ -22,14 +22,15 @@ export class ProductsComponent implements OnInit {
 
   readonly lowStockCount = computed(() => 
     this.adminData.productList().filter(
-      product => product.stock > 0 && product.stock < 10).length
+      product => product.stock > 0 && product.stock < 10
+    ).length
   );
   readonly outOfStockCount = computed(() => 
     this.adminData.productList().filter(
       product => product.stock === 0
     ).length
   );
-  readonly inventoryCalue =computed(() => 
+  readonly inventoryValue =computed(() => 
     this.adminData.productList().reduce(
       (total, product) => total + product.price * product.stock, 0 
     )
@@ -86,9 +87,9 @@ export class ProductsComponent implements OnInit {
       this.filterProducts().length);
   });
 
-  readonly totalPage = computed(() => Math.ceil(
-    this.filterProducts().length / this.pageSize
-  ));
+  readonly totalPage = computed(() => 
+    Math.max(1,Math.ceil(this.filterProducts().length / this.pageSize))
+  );
 
   readonly paginatedProducts = computed(() => {
     const start = (this.page() - 1) * this.pageSize;

@@ -52,12 +52,30 @@
         </select>
       </div>
 
+      <!-- Laading -->
+      @if (productStore.loading()) {
+        <div class="py-20 text-center text-slate-400">Loading products...</div>
+      }
+
+      @if (productStore.error()) {
+        <div class="py-20 text-center text-red-400">
+          {{ productStore.error() }}
+        </div>
+      }
+
+      @if (
+        !productStore.loading() && productStore.filteredProducts().length === 0
+      ) {}
+
       <!-- PRODUCT GRID -->
       <div
         class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6"
       >
-        @for (product of displayedProducts(); track product.id) {
-          <app-product-card [product]="product" />
+        @for (product of displayedProducts(); track product.id; let i = $index) {
+          <app-product-card
+            [product]="product"
+            [imageLoading]="i === 0 ? 'eager' : 'lazy'"
+          />
         }
       </div>
 

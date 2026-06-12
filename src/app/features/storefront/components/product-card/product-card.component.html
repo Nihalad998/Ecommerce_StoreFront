@@ -6,7 +6,7 @@
     <img
       [src]="product.thumbnail"
       [alt]="product.title"
-      loading="lazy"
+      [attr.loading]="imageLoading"
       class="w-full h-52 object-contain bg-slate-950 p-4"
     />
 
@@ -31,7 +31,7 @@
 
     <div class="mt-3 flex items-center gap-2">
       <span class="text-xl font-bold text-indigo-400">
-        ₹{{ product.price }}
+        ₹{{ product.price.toLocaleString() }}
       </span>
 
       <span class="text-sm text-slate-500 line-through">
@@ -40,11 +40,16 @@
     </div>
 
     <button
+      [disabled]="product.stock === 0"
+      [class.opacity-50]="product.stock === 0"
+      [class.cursor-not-allowed]="product.stock === 0"
       (click)="$event.stopPropagation(); addToCart()"
       class="mt-4 w-full h-11 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600"
     >
-      @if (addedToCart()) {
-        ✓ Added
+      @if (product.stock === 0) {
+        Out of Stock
+      } @else if (addedToCart()) {
+        Added
       } @else {
         Add To Cart
       }

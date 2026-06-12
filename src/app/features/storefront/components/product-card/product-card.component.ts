@@ -16,6 +16,7 @@ export class ProductCardComponent {
   loading = signal(true);
 
   @Input({ required: true }) product!: Product;
+  @Input() imageLoading: 'lazy' | 'eager' = 'lazy';
 
   private cartStore = inject(CartStore);
   private router = inject(Router);
